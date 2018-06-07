@@ -1,0 +1,364 @@
+<html><head>
+	<title>BLE Controller</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="mobile-web-app-capable" content="yes">	
+	<style>
+		body{
+			font-family: Helvetica;
+			text-align:center;
+			width:100%;
+			height:100%;
+			overflow-x: hidden; 
+			overflow-y: hidden;			
+		}
+		/*range slider styles*/
+		input[type='range'] {
+  		width: 210px;
+  		height: 30px;
+  		overflow: hidden;
+  		cursor: pointer;
+		}
+		input[type='range'],
+		input[type='range']::-webkit-slider-runnable-track,
+		input[type='range']::-webkit-slider-thumb {
+		  -webkit-appearance: none;
+		}
+		input[type='range']::-webkit-slider-runnable-track {
+		  width: 200px;
+		  height: 10px;
+		  background: #AAA;
+		}
+		input[type='range']::-webkit-slider-thumb {
+		  position: relative;
+		  height: 30px;
+		  width: 30px;
+		  margin-top: -10px;
+		  background: steelblue;
+		  border-radius: 50%;
+		  border: 2px solid white;
+		}
+		input[type='range']::-webkit-slider-thumb::before {
+		  position: absolute;
+		  content: '';
+		  height: 10px; /* equal to height of runnable track */
+		  width: 500px; /* make this bigger than the widest range input element */
+		  left: -502px; /* this should be -2px - width */
+		  top: 8px; /* don't change this */
+		  background: #777;
+		}
+		#input_2{
+			display: none;
+		}
+
+		#m1{
+			-webkit-transform:rotate(270deg);
+			width:40%;
+			position:absolute;
+			top:50%;
+			left:5%;
+		}
+		#m2{
+			-webkit-transform:rotate(270deg);
+			width:40%;
+			position:absolute;
+			top:50%;
+			left:40%;			
+		}
+
+		#connect{
+			margin-top:10px;
+			width:200px;
+			height:50px;
+			font-size:20px;
+			border-radius:5px;
+			border:5px solid #000;
+			background-color: #FFF;
+			outline: none;
+		}
+
+		#connect:active{
+			border-color:#CCC;
+		}
+
+		#autonomus{
+			margin-top:10px;
+			width:200px;
+			height:50px;
+			font-size:20px;
+			border-radius:5px;
+			border:5px solid #000;
+			background-color: #FFF;
+			outline: none;
+		}
+
+		#autonomus:active{
+			border-color:#CCC;
+		}
+
+		#velocita{
+			margin-top:35px;
+			margin-left:28px;
+			width:200px;
+			height:20px;
+			font-size:20px;
+			border-radius:5px;
+			border:5px solid #000;
+			background-color: #FFF;
+			outline: none;
+		}
+		#led{
+			margin-top:-35px;
+			margin-left:550px;
+			width:200px;
+			height:20px;
+			font-size:20px;
+			border-radius:5px;
+			border:5px solid #000;
+			background-color: #FFF;
+			outline: none;
+		}
+	</style>
+<link type="text/css" rel="stylesheet" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/content.css"></head>
+<body>
+	<button id="connect">Connect</button>
+	<button id="autonomus" onclick="automode();">Auto Mode</button>
+
+	<br>
+	<div class="container">
+		<div id="velocita">Velocita:</div>
+		<input id="m1" type="range" min="0" max="100" step="10"  value="0">
+
+		<div id="led">Intensità LED:</div>
+		<input id="m2" type="range" min="0" max="100" step="10" value="0" onchange="updateLed();"> 
+	</div>
+	<script>
+		//BLE
+
+		let connectBtn = document.getElementById('connect');
+		let m1slider   = document.getElementById('m1');
+		let m2slider   = document.getElementById('m2');
+		let automBtn   = document.getElementById('autonomus');
+		var m1Change = false;
+		var m2Change = false;
+		let deviceCache = null;
+		let characteristicCache = null;
+    	let executedForward = false;
+    	let executedReverse = false;
+    	let executedRight = false;
+    	let executedLeft = false;
+
+
+
+		window.onload = () => {
+			if(!navigator.bluetooth){
+				alert('Your current browser does not support web bluetooth or is not enabled. Please use the latest version of Chrome and enable Web Bluetooth under chrome://flags');
+				connectBtn.disabled = true;
+			}
+			connectBtn.onclick = connect;
+		}
+
+		document.addEventListener('keydown', function (evt) {
+  			if (evt.keyCode === 87) {
+  				if (!executedForward){
+  					updateSpeedForward();
+  				}	
+  			}
+  			if (evt.keyCode === 65) {
+  				if (!executedLeft){
+  					turnLeft();
+  				}
+  			}
+  			if (evt.keyCode === 83) {
+  				if (!executedReverse){
+  					updateSpeedReverse();
+  				}
+  			}
+  			if (evt.keyCode === 68) {
+  				if(!executedRight){
+  					turnRight();
+  				}
+  			}
+
+		});
+		document.addEventListener('keyup', function (evt) {
+  			if (evt.keyCode === 87) {
+  				executedForward = false;
+				stopMotor();  			
+			}
+			if (evt.keyCode === 65) {
+  				executedLeft = false;
+				stopMotor();  			
+			}
+			if (evt.keyCode === 83) {
+  				executedReverse = false;
+				stopMotor();  			
+			}
+			if (evt.keyCode === 68) {
+  				executedRight = false;
+				stopMotor();  			
+			}
+		});
+
+
+		function connect() {
+  			return (deviceCache ? Promise.resolve(deviceCache) :
+			  requestBluetoothDevice()).
+			  then(device => connectDeviceAndCacheCharacteristic(device)).
+			  then(characteristic => startNotifications(characteristic)).
+			  catch(error => console.log(error));
+		}
+
+		function requestBluetoothDevice() {
+
+			  return navigator.bluetooth.requestDevice({
+			    filters: [{services: [0xFFE0]}],
+			  }).
+			      then(device => {
+			        deviceCache = device;
+			        return deviceCache;
+			    	});
+		}
+
+		function connectDeviceAndCacheCharacteristic(device) {
+			  if (device.gatt.connected && characteristicCache) {
+			    return Promise.resolve(characteristicCache);
+			  }
+
+			  return device.gatt.connect().
+			      then(server => {
+			        return server.getPrimaryService(0xFFE0);
+			      }).
+			      then(service => {
+			        return service.getCharacteristic(0xFFE1);
+			      }).
+			      then(characteristic => {
+			        characteristicCache = characteristic;
+
+			        return characteristicCache;
+			      });
+		}
+
+		function startNotifications(characteristic) {
+  			return characteristic.startNotifications()
+		}
+
+		function writeToCharacteristic(characteristic, str) {
+  			characteristic.writeValue(str2ab(str));
+		}
+
+		function str2ab(str){
+			let buf = new ArrayBuffer(str.length); // 2 bytes for each char
+			let bufView = new Uint8Array(buf); //make sure buffer array is of type uint8
+			for (let i=0, strLen=str.length; i < strLen; i++) {
+				bufView[i] = str.charCodeAt(i);
+			}
+			return buf;
+		}
+
+
+		function stopMotor(){
+			let str = "00#00#0#0#0"; 
+			console.log(str);
+  			writeToCharacteristic(characteristicCache, str);
+		}
+
+		function updateLed(){
+			if(m2slider.value == 100){
+				let str = "0#0#0#0#"+m2slider.value;
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else if(m2slider.value == 0) {
+				let str = "000#0#0#0#"+m2slider.value;
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else {
+				let str = "00#0#0#0#"+m2slider.value;
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}
+		}
+		
+		function updateSpeedForward(){
+			executedForward = true;
+			if(m1slider.value == 100){
+				let str = m1slider.value+"#0#0#0#0";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else if(m1slider.value == 0) {
+				let str = m1slider.value+"#0#0#0#000";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else {
+				let str = m1slider.value+"#0#0#0#00";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}
+		}
+
+		function updateSpeedReverse(){
+				executedReverse= true;
+				if(m1slider.value == 100){
+				let str = "0#"+m1slider.value+"#0#0#0";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else if(m1slider.value == 0) {
+				let str = "0#"+m1slider.value+"#0#0#000";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else {
+				let str = "0#"+m1slider.value+"#0#0#00";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}
+		}
+
+		function turnRight(){
+			  	executedRight = true;
+				if(m1slider.value == 100){
+				let str = "0#0#0#"+m1slider.value+"#0";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else if(m1slider.value == 0) {
+				let str = "0#0#0#"+m1slider.value+"#000";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else {
+				let str = "0#0#0#"+m1slider.value+"#00";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}
+		}
+
+		function turnLeft(){
+			  	executedLeft = true;
+				if(m1slider.value == 100){
+				let str = "0#0#0#"+m1slider.value+"#0";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else if(m1slider.value == 0) {
+				let str = "0#0#"+m1slider.value+"#0#000";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else {
+				let str = "0#0#"+m1slider.value+"#0#00";
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}
+		}
+
+		function automode(){
+			let str = "11#11#1#1#0";
+			console.log(str);
+  			writeToCharacteristic(characteristicCache, str);
+		}
+
+
+
+		
+	</script>
+
+
+</body></html>
