@@ -145,7 +145,7 @@
 			}
 		}); */
 
-		    //keyCodes for W(87) and A(65) S(83) D(68)
+		//keyCodes for W(87) and A(65) S(83) D(68)
 	    var codeset = { 87: false, 65: false, 83: false, 68: false };
 
 	    //Tracking the Key down & Key up events
@@ -154,25 +154,21 @@
 	            codeset[e.keyCode] = true;
 	            if(codeset[87]){
 	            	if (!executedForward){
-		                console.log("w");
 	            		updateSpeedForward();
 	            	}
 	            }
 	            if(codeset[65]){
 					if (!executedLeft){
-		                console.log("a");
 						turnLeft();
 					}
 				}
 	            if(codeset[83]){
 					if (!executedReverse){
-		                console.log("s");
 						updateSpeedReverse();
 					}
 				}	
 	            if(codeset[68]){
 					if(!executedRight){
-		                console.log("d");
 						turnRight();
 					}
 				}
