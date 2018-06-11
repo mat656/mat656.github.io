@@ -55,77 +55,6 @@
 		  top: 8px; /* don't change this */
 		  background: #777;
 		}
-		/*#input_2{
-			display: none;
-		}
-
-		#m1{
-			-webkit-transform:rotate(270deg);
-			width:40%;
-			position:absolute;
-			top:50%;
-			left:5%;
-		}
-		#m2{
-			-webkit-transform:rotate(270deg);
-			width:40%;
-			position:absolute;
-			top:50%;
-			left:40%;			
-		}
-
-		#connect{
-			margin-top:10px;
-			width:200px;
-			height:50px;
-			font-size:20px;
-			border-radius:5px;
-			border:5px solid #000;
-			background-color: #FFF;
-			outline: none;
-		}
-
-		#connect:active{
-			border-color:#CCC;
-		}
-
-		#autonomus{
-			margin-top:10px;
-			width:200px;
-			height:50px;
-			font-size:20px;
-			border-radius:5px;
-			border:5px solid #000;
-			background-color: #FFF;
-			outline: none;
-		}
-
-		#autonomus:active{
-			border-color:#CCC;
-		}*/
-/*
-		#velocita{
-			margin-top:35px;
-			margin-left:28px;
-			width:200px;
-			height:20px;
-			font-size:20px;
-			border-radius:5px;
-			border:5px solid #000;
-			background-color: #FFF;
-			outline: none;
-		}
-		#led{
-			margin-top:-35px;
-			margin-left:550px;
-			width:200px;
-			height:20px;
-			font-size:20px;
-			border-radius:5px;
-			border:5px solid #000;
-			background-color: #FFF;
-			outline: none;
-		}*/
 	</style>
 	<body>
 	<div class="jumbotron text-center">
@@ -174,7 +103,7 @@
 			connectBtn.onclick = connect;
 		}
 
-		document.addEventListener('keydown', function (evt) {
+		/* document.addEventListener('keydown', function (evt) {
   			if (evt.keyCode === 87) {
   				if (!executedForward){
   					updateSpeedForward();
@@ -214,7 +143,52 @@
   				executedRight = false;
 				stopMotor();  			
 			}
-		});
+		}); */
+
+		    //keyCodes for W(87) and A(65) S(83) D(68)
+	    var codeset = { 87: false, 65: false, 83: false, 68: false };
+
+	    //Tracking the Key down & Key up events
+	    document.addEventListener('keydown', function (e){
+	        if (e.keyCode in codeset) {
+	            codeset[e.keyCode] = true;
+	            if(codeset[87]){
+	            	if (!executedForward){
+		                console.log("w");
+	            		updateSpeedForward();
+	            	}
+	            }
+	            if(codeset[65]){
+					if (!executedLeft){
+		                console.log("a");
+						turnLeft();
+					}
+				}
+	            if(codeset[83]){
+					if (!executedReverse){
+		                console.log("s");
+						updateSpeedReverse();
+					}
+				}	
+	            if(codeset[68]){
+					if(!executedRight){
+		                console.log("d");
+						turnRight();
+					}
+				}
+			}
+	    });
+	    
+	    document.addEventListener('keyup', function (e) {
+	        if (e.keyCode in codeset) {
+	            codeset[e.keyCode] = false;
+	            executedForward = false;
+  				executedLeft = false;				
+          		executedReverse = false;
+				executedRight = false;
+				stopMotor();  			
+	        }
+	    });
 
 
 		function connect() {
