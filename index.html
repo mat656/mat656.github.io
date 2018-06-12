@@ -288,15 +288,15 @@
 		function updateSpeedForward(){
 			executedForward = true;
 			if(m1slider.value == 100){
-				let str = m1slider.value+"#0#0#0#0";
+				let str = m1slider.value+"#0#0#000";
 				console.log(str);
   				writeToCharacteristic(characteristicCache, str);
 			}else if(m1slider.value == 0) {
-				let str = m1slider.value+"#0#0#0#000";
+				let str = m1slider.value+"#00#00#000";
 				console.log(str);
   				writeToCharacteristic(characteristicCache, str);
 			}else {
-				let str = m1slider.value+"#0#0#0#00";
+				let str = m1slider.value+"#00#00#00";
 				console.log(str);
   				writeToCharacteristic(characteristicCache, str);
 			}
