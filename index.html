@@ -264,9 +264,19 @@
 
 
 		function stopMotor(){
-			let str = "00#00#0#0#0"; 
-			console.log(str);
-  			writeToCharacteristic(characteristicCache, str);
+			if(m2slider.value == 100){
+				let str = "0#0#0#0#"+m2slider.value;
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else if(m2slider.value == 0) {
+				let str = "000#0#0#0#"+m2slider.value;
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}else {
+				let str = "00#0#0#0#"+m2slider.value;
+				console.log(str);
+  				writeToCharacteristic(characteristicCache, str);
+			}
 		}
 
 		function updateLed(){
