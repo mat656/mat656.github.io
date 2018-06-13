@@ -45,3 +45,6 @@ input[type='range']::-webkit-slider-thumb::before {
 .content{
 	text-align:center;
 }
+.text_box{
+	margin-top: 32px;
+}
