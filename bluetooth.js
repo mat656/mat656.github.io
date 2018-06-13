@@ -180,7 +180,7 @@
 	function log(data, type = '') {
 		var n_div = $('.in').length;
 		if (n_div >= 6){
-			for (int i = 0; i<n_div-6; i++){
+			for (var i = 0; i<n_div-6; i++){
 				$('.in')[0].remove();
 			}
 		}
