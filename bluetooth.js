@@ -309,4 +309,4 @@
 			writeToCharacteristic(characteristicCache, command);
 			last_command = command;
 		}
-	}, 500);
+	}, 300);
