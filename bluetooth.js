@@ -279,3 +279,9 @@
 		console.log(str);
 			writeToCharacteristic(characteristicCache, str);
 	}
+
+	function get_info(){
+		let str = "0#1#1#11#11";
+		console.log(str);
+			writeToCharacteristic(characteristicCache, str);
+	}
