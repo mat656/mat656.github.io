@@ -204,24 +204,22 @@
 
 
 	function stopMotor(){
-		let str = "000#00#0#00"; 
-		console.log(str);
-			writeToCharacteristic(characteristicCache, str);
+		command  = "000#00#0#00"; 
+		// console.log(str);
+		// 	writeToCharacteristic(characteristicCache, str);
 	}
 
 	function updateLed(){
 		if(m2slider.value == 100){
-			let str = "0#0#0#0#"+m2slider.value;
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command= "0#0#0#0#"+m2slider.value;
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else if(m2slider.value == 0) {
-			let str = "000#0#0#0#"+m2slider.value;
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "000#0#0#0#"+m2slider.value;
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else {
-			let str = "00#0#0#0#"+m2slider.value;
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "00#0#0#0#"+m2slider.value;
 		}
 	}
 	var command = "00#00#00#00";
