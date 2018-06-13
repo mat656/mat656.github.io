@@ -224,83 +224,91 @@
 				writeToCharacteristic(characteristicCache, str);
 		}
 	}
+	var command = "00#00#00#00";
 
 	function updateSpeedForward(){
 		executedForward = true;
 		if(m1slider.value == 100){
-			let str = m1slider.value+"#0#0#000";
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = m1slider.value+"#0#0#000";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else if(m1slider.value == 0) {
-			let str = m1slider.value+"#00#00#000";
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = m1slider.value+"#00#00#000";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else {
-			let str = m1slider.value+"#00#00#00";
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = m1slider.value+"#00#00#00";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}
 	}
 
 	function updateSpeedReverse(){
 			executedReverse= true;
 			if(m1slider.value == 100){
-			let str = "0#"+m1slider.value+"#0#000";
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command= "0#"+m1slider.value+"#0#000";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else if(m1slider.value == 0) {
-			let str = "00#"+m1slider.value+"#00#000";
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "00#"+m1slider.value+"#00#000";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else {
-			let str = "00#"+m1slider.value+"#00#00";
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "00#"+m1slider.value+"#00#00";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}
 	}
 
 	function turnRight(){
 		  	executedRight = true;
 			if(m1slider.value == 100){
-			let str = "00#00#0#"+m1slider.value;
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "00#00#0#"+m1slider.value;
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else if(m1slider.value == 0) {
-			let str = "000#00#00#"+m1slider.value;
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "000#00#00#"+m1slider.value;
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else {
-			let str = "00#00#00#"+m1slider.value;
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "00#00#00#"+m1slider.value;
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}
 	}
 
 	function turnLeft(){
 		  	executedLeft = true;
 			if(m1slider.value == 100){
-			let str = "00#00#"+m1slider.value+"#0";
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "00#00#"+m1slider.value+"#0";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else if(m1slider.value == 0) {
-			let str = "000#00#"+m1slider.value+"#00";
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "000#00#"+m1slider.value+"#00";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}else {
-			let str = "00#00#"+m1slider.value+"#00";
-			console.log(str);
-				writeToCharacteristic(characteristicCache, str);
+			command = "00#00#"+m1slider.value+"#00";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
 		}
 	}
 
 	function automode(){
-		let str = "11#11#1#1#0";
-		console.log(str);
-			writeToCharacteristic(characteristicCache, str);
+		command = "11#11#1#1#0";
+		// console.log(str);
+		// 	writeToCharacteristic(characteristicCache, str);
 	}
 
 	function get_info(){
-		let str = "0#1#1#11#11";
-		console.log(str);
-			writeToCharacteristic(characteristicCache, str);
+		command = "0#1#1#11#11";
+		// console.log(str);
+		// 	writeToCharacteristic(characteristicCache, str);
 	}
+	var last_command = "0";
+	var interval = setInterval(function(){
+		if (last_command != command){
+			writeToCharacteristic(characteristicCache, command);
+			last_command = command;
+		}
+	}, 500);
