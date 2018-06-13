@@ -154,18 +154,32 @@
 			});
 	}
 
-	function handleCharacteristicValueChanged(event) {
-			let value = new TextDecoder().decode(event.target.value);
-			console.log(value);
-			log(value, 'in');
-			console.log("Finito");
-	}
-
 	let readBuffer = '';
+	function handleCharacteristicValueChanged(event) {
+		let value = new TextDecoder().decode(event.target.value);
 
+	  	for (let c of value) {
+	    	if (c === '\n') {
+		      let data = readBuffer.trim();
+		      readBuffer = '';
+
+		      if (data) {
+		        receive(data);
+		      }
+		    }
+		    else {
+		      readBuffer += c;
+		    }
+		  }
+	}		
+
+	function receive(data) {
+  		log(data, 'in');
+	}
+	
 	function log(data, type = '') {
-			terminal.insertAdjacentHTML('beforeend',
-			'<div' + (type ? ' class="' + type + '"' : '') + '>' + data + '</div>');
+		terminal.insertAdjacentHTML('beforeend',
+		'<div' + (type ? ' class="' + type + '"' : '') + '>' + string_to_print + '</div>');
 	}
 
 	function writeToCharacteristic(characteristic, str) {
