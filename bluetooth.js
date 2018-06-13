@@ -307,6 +307,7 @@
 	var interval = setInterval(function(){
 		if (last_command != command){
 			writeToCharacteristic(characteristicCache, command);
+			console.log(command);
 			last_command = command;
 		}
 	}, 300);
