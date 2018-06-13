@@ -179,7 +179,7 @@
 	
 	function log(data, type = '') {
 		terminal.insertAdjacentHTML('beforeend',
-		'<div' + (type ? ' class="' + type + '"' : '') + '>' + string_to_print + '</div>');
+		'<div' + (type ? ' class="' + type + '"' : '') + '>' + data + '</div>');
 	}
 
 	function writeToCharacteristic(characteristic, str) {
