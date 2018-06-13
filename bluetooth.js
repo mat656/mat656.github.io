@@ -156,14 +156,12 @@
 
 	function handleCharacteristicValueChanged(event) {
 			let value = new TextDecoder().decode(event.target.value);
+			console.log(value);
 			log(value, 'in');
+			console.log("Finito");
 	}
 
 	let readBuffer = '';
-
-	function receive(data) {
-	  log(data, 'in');
-	}
 
 	function log(data, type = '') {
 			terminal.insertAdjacentHTML('beforeend',
