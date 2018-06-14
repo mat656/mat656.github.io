@@ -1,6 +1,8 @@
 	//BLE
 
 	let connectBtn = document.getElementById('connect');
+	let test = document.getElementById('test');
+
 	let m1slider   = document.getElementById('m1');
 	let m2slider   = document.getElementById('m2');
 	let automBtn   = document.getElementById('autonomus');
@@ -22,7 +24,49 @@
 			connectBtn.disabled = true;
 		}
 		connectBtn.onclick = connect;
-	}	
+	}
+
+	/* document.addEventListener('keydown', function (evt) {
+			if (evt.keyCode === 87) {
+				if (!executedForward){
+					updateSpeedForward();
+				}	
+			}
+			if (evt.keyCode === 65) {
+				if (!executedLeft){
+					turnLeft();
+				}
+			}
+			if (evt.keyCode === 83) {
+				if (!executedReverse){
+					updateSpeedReverse();
+				}
+			}
+			if (evt.keyCode === 68) {
+				if(!executedRight){
+					turnRight();
+				}
+			}
+
+	});
+	document.addEventListener('keyup', function (evt) {
+			if (evt.keyCode === 87) {
+				executedForward = false;
+			stopMotor();  			
+		}
+		if (evt.keyCode === 65) {
+				executedLeft = false;
+			stopMotor();  			
+		}
+		if (evt.keyCode === 83) {
+				executedReverse = false;
+			stopMotor();  			
+		}
+		if (evt.keyCode === 68) {
+				executedRight = false;
+			stopMotor();  			
+		}
+	}); */
 
 	//keyCodes for W(87) and A(65) S(83) D(68)
 	var codeset = { 87: false, 65: false, 83: false, 68: false };

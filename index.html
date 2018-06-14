@@ -1,24 +1,17 @@
-<html>
-	<head>
+<html><head>
 	<title>BLE Controller</title>
 	<!-- Bootstrap CSS -->
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="bootstrap-toggle.min.css">
-    <link rel="stylesheet" href="bootstrap-toggle.css">
-
 	<script src="/jquery-3.3.1.slim.min.js"></script>
     <script src="/popper.min.js"></script>
-    <script src="/bootstrap.min.js"></script> 
-    <script src="/bootstrap-toggle.min.js"></script>
-    <script src="/bootstrap-toggle.js"></script>
-
+    <script src="/bootstrap.min.js"></script>
+  
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="mobile-web-app-capable" content="yes">	
-	
 
 	<body>
 	<div class="jumbotron text-center">
@@ -26,8 +19,7 @@
 	</div>
 	<div class="content">
   	<!-- Page content -->
-  		<input id="test" type="checkbox" checked data-toggle="toggle" data-on="Non connesso" data-off="Connesso" data-onstyle="danger" data-offstyle="success" onchange="connect();">
-		<!--<button id="connect" class="btn btn-primary">Connetti</button> -->
+		<button id="connect" class="btn btn-primary">Connetti</button>
 		<button id="autonomus" class="btn btn-danger" onclick="automode();">Auto Mode</button>
 
 		<div style="margin-top: 30px">
