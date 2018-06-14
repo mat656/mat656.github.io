@@ -23,7 +23,7 @@
 			alert('Your current browser does not support web bluetooth or is not enabled. Please use the latest version of Chrome and enable Web Bluetooth under chrome://flags');
 			connectBtn.disabled = true;
 		}
-		test.onclick = connect;
+		connectBtn.onclick = connect;
 	}
 
 	/* document.addEventListener('keydown', function (evt) {
