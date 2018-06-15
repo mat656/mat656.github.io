@@ -251,7 +251,7 @@
 		}
 	}
 
-	var timesClicked = 0;
+	var timesClicked = 2;
 
 	function automode(){
 		// console.log(str);
