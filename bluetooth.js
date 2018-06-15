@@ -258,11 +258,14 @@
 		if (timesClicked%2==0) {
 			timesClicked++;
 			command = "100#00#";
-			timer.stop();
+			codeset = {};
+			for (var i = 0; i < 150; i++);
 			console.log("ciao");
+			timer.stop();
 		}else{
 			timesClicked++;
 			command = "101#00#";
+			codeset = { 87: false, 65: false, 83: false, 68: false };
 			timer.start();
 		}
 	}
