@@ -165,6 +165,7 @@
 			characteristic.writeValue(str2ab(str));
 			//catch(error => console.log(error));
 		}
+		connected--;
 
 	}
 
