@@ -1,5 +1,4 @@
 	//BLE
-
 	let connectBtn = document.getElementById('connect');
 	let test = document.getElementById('test');
 
@@ -14,7 +13,15 @@
 	let executedRight = false;
 	let executedLeft = false;
 
-
+	var last_command = "000#000#";
+	
+	var timer = new Timer(function() {
+		if (last_command != command){
+			writeToCharacteristic(characteristicCache, command);
+			console.log(command);
+			last_command = command;
+		}	
+	}, 100);
 
 	window.onload = () => {
 		if(!navigator.bluetooth){
@@ -22,49 +29,11 @@
 			connectBtn.disabled = true;
 		}
 		connectBtn.onclick = connect;
+		timer.start();
 	}
 
-	/* document.addEventListener('keydown', function (evt) {
-			if (evt.keyCode === 87) {
-				if (!executedForward){
-					updateSpeedForward();
-				}	
-			}
-			if (evt.keyCode === 65) {
-				if (!executedLeft){
-					turnLeft();
-				}
-			}
-			if (evt.keyCode === 83) {
-				if (!executedReverse){
-					updateSpeedReverse();
-				}
-			}
-			if (evt.keyCode === 68) {
-				if(!executedRight){
-					turnRight();
-				}
-			}
+	
 
-	});
-	document.addEventListener('keyup', function (evt) {
-			if (evt.keyCode === 87) {
-				executedForward = false;
-			stopMotor();  			
-		}
-		if (evt.keyCode === 65) {
-				executedLeft = false;
-			stopMotor();  			
-		}
-		if (evt.keyCode === 83) {
-				executedReverse = false;
-			stopMotor();  			
-		}
-		if (evt.keyCode === 68) {
-				executedRight = false;
-			stopMotor();  			
-		}
-	}); */
 
 	//keyCodes for W(87) and A(65) S(83) D(68)
 	var codeset = { 87: false, 65: false, 83: false, 68: false };
@@ -155,6 +124,7 @@
 	}
 
 	let readBuffer = '';
+
 	function handleCharacteristicValueChanged(event) {
 		let value = new TextDecoder().decode(event.target.value);
 
@@ -289,9 +259,11 @@
 		if (timesClicked%2==0) {
 			command = "100#00#";
 			codeset = {};
+			timer.stop();
 		}else{
 			command = "101#00#";
 			codeset = { 87: false, 65: false, 83: false, 68: false };
+			timer.start();
 		}
 		timesClicked++;
 	}
@@ -316,11 +288,10 @@
 		}
 	}
 	
-	var last_command = "000#000#";
-	var interval = setInterval(function(){
+	/* var interval = setInterval(function(){
 		if (last_command != command){
 			writeToCharacteristic(characteristicCache, command);
 			console.log(command);
 			last_command = command;
 		}
-	}, 100);
+	}, 100); */
