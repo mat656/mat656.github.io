@@ -12,7 +12,6 @@
 	let executedReverse = false;
 	let executedRight = false;
 	let executedLeft = false;
-	let connected = 0;
 	var last_command = "000#000#";
 	
 	var timer = new Timer(function() {
@@ -83,7 +82,6 @@
 		  then(device => connectDeviceAndCacheCharacteristic(device)).
 		  then(characteristic => startNotifications(characteristic)).
 		  catch(error => console.log(error));
-		  connected = 1;
 	}
 
 	function requestBluetoothDevice() {
@@ -161,12 +159,8 @@
 	}
 
 	function writeToCharacteristic(characteristic, str) {
-		if(connected=1){
 			characteristic.writeValue(str2ab(str));
-			//catch(error => console.log(error));
-		}
-		connected--;
-
+			catch(error => console.log(error));
 	}
 
 	function str2ab(str){
@@ -264,7 +258,6 @@
 		// 	writeToCharacteristic(characteristicCache, str);
 		if (timesClicked%2==0) {
 			timesClicked++;
-
 			command = "100#00#";
 			timer.stop();
 			console.log("ciao");
