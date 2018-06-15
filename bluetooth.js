@@ -259,9 +259,9 @@
 			timesClicked++;
 			command = "100#00#";
 			codeset = {};
-			for (var i = 0; i < 150; i++);
-			console.log("ciao");
-			timer.stop();
+			setTimeout(function(){
+				timer.stop();
+			}, 250);
 		}else{
 			timesClicked++;
 			command = "101#00#";
