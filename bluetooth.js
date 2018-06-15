@@ -1,12 +1,12 @@
 	//BLE
 
 	let connectBtn = document.getElementById('connect');
+	let test = document.getElementById('test');
+
 	let m1slider   = document.getElementById('m1');
 	let m2slider   = document.getElementById('m2');
 	let automBtn   = document.getElementById('autonomus');
 	let terminal   	   = document.getElementById('terminal');
-	var m1Change = false;
-	var m2Change = false;
 	let deviceCache = null;
 	let characteristicCache = null;
 	let executedForward = false;
@@ -22,7 +22,49 @@
 			connectBtn.disabled = true;
 		}
 		connectBtn.onclick = connect;
-	}	
+	}
+
+	/* document.addEventListener('keydown', function (evt) {
+			if (evt.keyCode === 87) {
+				if (!executedForward){
+					updateSpeedForward();
+				}	
+			}
+			if (evt.keyCode === 65) {
+				if (!executedLeft){
+					turnLeft();
+				}
+			}
+			if (evt.keyCode === 83) {
+				if (!executedReverse){
+					updateSpeedReverse();
+				}
+			}
+			if (evt.keyCode === 68) {
+				if(!executedRight){
+					turnRight();
+				}
+			}
+
+	});
+	document.addEventListener('keyup', function (evt) {
+			if (evt.keyCode === 87) {
+				executedForward = false;
+			stopMotor();  			
+		}
+		if (evt.keyCode === 65) {
+				executedLeft = false;
+			stopMotor();  			
+		}
+		if (evt.keyCode === 83) {
+				executedReverse = false;
+			stopMotor();  			
+		}
+		if (evt.keyCode === 68) {
+				executedRight = false;
+			stopMotor();  			
+		}
+	}); */
 
 	//keyCodes for W(87) and A(65) S(83) D(68)
 	var codeset = { 87: false, 65: false, 83: false, 68: false };
@@ -162,39 +204,28 @@
 
 
 	function stopMotor(){
-		command  = "000#00#0#00"; 
+		command  = "000#00#"; 
 		// console.log(str);
 		// 	writeToCharacteristic(characteristicCache, str);
 	}
 
-	function updateLed(){
-		if(m2slider.value == 100){
-			command= "0#0#0#0#"+m2slider.value;
-			// console.log(str);
-			// 	writeToCharacteristic(characteristicCache, str);
-		}else if(m2slider.value == 0) {
-			command = "000#0#0#0#"+m2slider.value;
-			// console.log(str);
-			// 	writeToCharacteristic(characteristicCache, str);
-		}else {
-			command = "00#0#0#0#"+m2slider.value;
-		}
-	}
-	var command = "00#00#00#00";
+	
+
+	var command = "000#00#";
 
 	function updateSpeedForward(){
 		executedForward = true;
 		if(m1slider.value == 100){
-			command = m1slider.value+"#0#0#000";
+			command = "08#"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}else if(m1slider.value == 0) {
-			command = m1slider.value+"#00#00#000";
+			command = "08#00"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}else {
-			command = m1slider.value+"#00#00#00";
-			// console.log(str);
+			command = "008#"+m1slider.value+"#";
+			//console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}
 	}
@@ -202,15 +233,15 @@
 	function updateSpeedReverse(){
 			executedReverse= true;
 			if(m1slider.value == 100){
-			command= "0#"+m1slider.value+"#0#000";
+			command= "09#"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}else if(m1slider.value == 0) {
-			command = "00#"+m1slider.value+"#00#000";
+			command= "09#00"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}else {
-			command = "00#"+m1slider.value+"#00#00";
+			command= "009#"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}
@@ -219,15 +250,15 @@
 	function turnRight(){
 		  	executedRight = true;
 			if(m1slider.value == 100){
-			command = "00#00#0#"+m1slider.value;
+			command = "10#"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}else if(m1slider.value == 0) {
-			command = "000#00#00#"+m1slider.value;
+			command = "10#00"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}else {
-			command = "00#00#00#"+m1slider.value;
+			command = "010#"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}
@@ -236,36 +267,60 @@
 	function turnLeft(){
 		  	executedLeft = true;
 			if(m1slider.value == 100){
-			command = "00#00#"+m1slider.value+"#0";
+			command = "11#"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}else if(m1slider.value == 0) {
-			command = "000#00#"+m1slider.value+"#00";
+			command = "11#00"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}else {
-			command = "00#00#"+m1slider.value+"#00";
+			command = "011#"+m1slider.value+"#";
 			// console.log(str);
 			// 	writeToCharacteristic(characteristicCache, str);
 		}
 	}
 
+	var timesClicked = 0;
+
 	function automode(){
-		command = "11#11#1#1#0";
+		// console.log(str);
+		// 	writeToCharacteristic(characteristicCache, str);
+		if (timesClicked%2==0) {
+			command = "100#00#";
+			codeset = {};
+		}else{
+			command = "101#00#";
+			codeset = { 87: false, 65: false, 83: false, 68: false };
+		}
+		timesClicked++;
+	}
+
+	function get_info(){
+		command = "102#00#";
 		// console.log(str);
 		// 	writeToCharacteristic(characteristicCache, str);
 	}
 
-	function get_info(){
-		command = "0#1#1#11#11";
-		// console.log(str);
-		// 	writeToCharacteristic(characteristicCache, str);
+	function updateLed(){
+		if(m2slider.value == 100){
+			command= "99#"+m2slider.value+"#";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
+		}else if(m2slider.value == 0) {
+			command = "99#00"+m2slider.value+"#";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
+		}else {
+			command = "099#"+m2slider.value+"#";
+		}
 	}
-	var last_command = "0";
+	
+	var last_command = "000#000#";
 	var interval = setInterval(function(){
 		if (last_command != command){
 			writeToCharacteristic(characteristicCache, command);
 			console.log(command);
 			last_command = command;
 		}
-	}, 300);
+	}, 100);

@@ -4,13 +4,11 @@
 	<!-- Bootstrap CSS -->
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="bootstrap-toggle.min.css">
     <link rel="stylesheet" href="bootstrap-toggle.css">
 
 	<script src="/jquery-3.3.1.slim.min.js"></script>
     <script src="/popper.min.js"></script>
     <script src="/bootstrap.min.js"></script> 
-    <script src="/bootstrap-toggle.min.js"></script>
     <script src="/bootstrap-toggle.js"></script>
 
 	<meta name="description" content="">
@@ -26,8 +24,7 @@
 	</div>
 	<div class="content">
   	<!-- Page content -->
-  		<input id="test" type="checkbox" checked data-toggle="toggle" data-on="Non connesso" data-off="Connesso" data-onstyle="danger" data-offstyle="success" onchange="connect();">
-		<!--<button id="connect" class="btn btn-primary">Connetti</button> -->
+		<button id="connect" class="btn btn-primary">Connetti</button>
 		<button id="autonomus" class="btn btn-danger" onclick="automode();">Auto Mode</button>
 
 		<div style="margin-top: 30px">
@@ -54,6 +51,6 @@
 		<div id="terminal"></div>
 		</div>
 	</div>
-    <script src="/bluetooth.js"></script>
+    <script src="/bluetooth_new.js"></script>
 
 </body></html>
