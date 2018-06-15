@@ -29,7 +29,6 @@
 			connectBtn.disabled = true;
 		}
 		connectBtn.onclick = connect;
-		timer.start();
 	}
 
 	
@@ -42,6 +41,7 @@
 	document.addEventListener('keydown', function (e){
 	    if (e.keyCode in codeset) {
 	        codeset[e.keyCode] = true;
+	        timer.start();
 	        if(codeset[87]){
 	        	if (!executedForward){
 	        		updateSpeedForward();
