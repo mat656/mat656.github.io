@@ -161,6 +161,7 @@
 
 	function writeToCharacteristic(characteristic, str) {
 			characteristic.writeValue(str2ab(str));
+			catch(error => console.log(error));
 	}
 
 	function str2ab(str){
