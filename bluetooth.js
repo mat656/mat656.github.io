@@ -163,8 +163,9 @@
 	function writeToCharacteristic(characteristic, str) {
 		if(connected=1){
 			characteristic.writeValue(str2ab(str));
-		}
 			catch(error => console.log(error));
+
+		}
 
 	}
 
