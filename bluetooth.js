@@ -272,7 +272,7 @@
 
 	function get_info(){
 		command = "102#00#";
-		// console.log(str);
+		console.log(str);
 		writeToCharacteristic(characteristicCache, str);
 	}
 
