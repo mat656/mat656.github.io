@@ -272,8 +272,8 @@
 
 	function get_info(){
 		command = "102#00#";
-		console.log(command);
-		writeToCharacteristic(characteristicCache, command);
+		//console.log(command);
+		//writeToCharacteristic(characteristicCache, command);
 	}
 
 	function updateLed(){
