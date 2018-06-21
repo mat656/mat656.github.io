@@ -20,7 +20,7 @@
 			console.log(command);
 			last_command = command;
 		}	
-	}, 100);
+	}, 180);
 
 	window.onload = () => {
 		if(!navigator.bluetooth){
