@@ -1,3 +1,9 @@
+<style>
+#cp5b i{
+	width:35px !important;
+	height:38px !important;
+}
+</style>
 <html><head>
 	<title>BLE Controller</title>
 	<!-- Bootstrap CSS -->
@@ -6,13 +12,16 @@
 	<script src="/jquery-3.3.1.slim.min.js"></script>
     <script src="/popper.min.js"></script>
     <script src="/bootstrap.min.js"></script>
-  
+  	<link href="/dist/css/bootstrap-colorpicker.css" rel="stylesheet">
+  	<script src="//code.jquery.com/jquery-3.2.1.js"></script>
+  	<script src="/dist/js/bootstrap-colorpicker.js"></script>
+
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="mobile-web-app-capable" content="yes">	
-
+	</head>
 	<body>
 	<div class="jumbotron text-center">
   		<h1>Rover Bluetooth Interface</h1>
@@ -41,12 +50,24 @@
 				<button class="btn"></button>
 			</div> -->
 		</div>
+		 <div class="container" style="margin-top: 18px">
+     	 <div id="cp5b" style="width: 50%; display: inline-flex;" class="input-group colorpicker-component" title="Using format option">
+  		<input id="cValue" type="text" class="form-control input-lg" value="#305AA2"/>
+  		<span class="input-group-addon"><i></i></span>
+		</div>
+		<script>
+		  $(function () {
+		    $('#cp5b').colorpicker({
+		      format: "rgb"
+		    });
+		  });
+		</script>
 		<div class="text_box">
 		<button id="sensor_info" class="btn btn-info" onclick="get_info();">Info Sensori</button>
+		<button id="rgb_color" class="btn btn-dark" onclick="apply_color();">Applica </button>
 		<div id="terminal"></div>
 		</div>
 	</div>
-	<script src="/timer.js"></script>
-    <script src="/bluetooth.js"></script>
-
+	<script src="timer.js"></script>
+    <script src="bluetooth.js"></script>
 </body></html>

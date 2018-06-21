@@ -1,11 +1,12 @@
 	//BLE
 	let connectBtn = document.getElementById('connect');
 	let test = document.getElementById('test');
-
+	let sliderValue = document.getElementById("slider_value");
 	let m1slider   = document.getElementById('m1');
 	let m2slider   = document.getElementById('m2');
 	let automBtn   = document.getElementById('autonomus');
 	let terminal   	   = document.getElementById('terminal');
+	let colore = document.getElementById('cValue');
 	let deviceCache = null;
 	let characteristicCache = null;
 	let executedForward = false;
@@ -13,14 +14,18 @@
 	let executedRight = false;
 	let executedLeft = false;
 	var last_command = "000#000#";
-	
+	var green_command;
+	var red_command;
+	var blue_command;
+
+
 	var timer = new Timer(function() {
 		if (last_command != command){
 			writeToCharacteristic(characteristicCache, command);
 			console.log(command);
 			last_command = command;
 		}	
-	}, 180);
+	}, 100);
 
 	window.onload = () => {
 		if(!navigator.bluetooth){
@@ -29,9 +34,6 @@
 		}
 		connectBtn.onclick = connect;
 	}
-
-	
-
 
 	//keyCodes for W(87) and A(65) S(83) D(68)
 	var codeset = { 87: false, 65: false, 83: false, 68: false };
@@ -74,7 +76,6 @@
 			stopMotor();  			
 	    }
 	});
-
 
 	function connect() {
 			return (deviceCache ? Promise.resolve(deviceCache) :
@@ -171,6 +172,8 @@
 		return buf;
 	}
 
+	function valore(){
+	}
 
 	function stopMotor(){
 		command  = "000#00#"; 
@@ -290,10 +293,80 @@
 		}
 	}
 	
-	/* var interval = setInterval(function(){
-		if (last_command != command){
-			writeToCharacteristic(characteristicCache, command);
-			console.log(command);
-			last_command = command;
+	function apply_color(){
+
+		timer.stop();
+
+		var string = colore.value;
+		var substring = string.split('(');
+		var subsubstring = substring[1].split(')');
+
+		var rgb = subsubstring[0].split(',');
+
+		var r = rgb[0];
+		var g = rgb[1];
+		var b = rgb[2];
+
+		create_command_red(r);
+		create_command_green(g);
+		create_command_blue(b);
+
+		setTimeout(function(){
+			console.log(red_command);
+			writeToCharacteristic(characteristicCache, red_command);
+		}, 50);
+		setTimeout(function(){
+			console.log(green_command);
+			writeToCharacteristic(characteristicCache, green_command);
+		}, 250);
+		setTimeout(function(){
+			console.log(blue_command);
+			writeToCharacteristic(characteristicCache, blue_command);
+		}, 450);
+
+		timer.start();
+
+	}
+
+	function create_command_red(r){
+		if(r >= 100){
+			red_command= "51#"+r+"#";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
+		}else if(r == 0) {
+			red_command = "51#00"+r+"#";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
+		}else {
+			red_command = "051#"+r+"#";
 		}
-	}, 100); */
+	}
+
+	function create_command_green(g){
+		if(g >= 100){
+			green_command= "52#"+g+"#";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
+		}else if(g == 0) {
+			green_command = "52#00"+g+"#";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
+		}else {
+			green_command = "052#"+g+"#";
+		}
+	}
+
+	function create_command_blue(b){
+		if(b >= 100){
+			blue_command= "53#"+b+"#";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
+		}else if(b == 0) {
+			blue_command = "53#00"+b+"#";
+			// console.log(str);
+			// 	writeToCharacteristic(characteristicCache, str);
+		}else {
+			blue_command = "053#"+b+"#";
+		}
+	}
+	
